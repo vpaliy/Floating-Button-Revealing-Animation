@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="revealItem">
+        <item>Player</item>
+        <item>Activity launching</item>
+    </array>
+</resources>

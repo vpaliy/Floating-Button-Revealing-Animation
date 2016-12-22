@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/topEnd"
+        android:title="Top|End">
+    </item>
+
+    <item
+        android:id="@+id/topStart"
+        android:title="Top|Start">
+    </item>
+
+    <item
+        android:id="@+id/bottomEnd"
+        android:title="Bottom|End">
+    </item>
+
+    <item
+        android:id="@+id/bottomStart"
+        android:title="Bottom|Start">
+    </item>
+
+</menu>
