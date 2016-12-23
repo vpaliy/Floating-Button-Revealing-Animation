@@ -133,9 +133,7 @@ public  class RevealAnimator
         if(dependentLayout.getParent()!=null) {
             determineFabLocation();
             initLayout();
-            Log.d(TAG,"Its not root");
         }
-        Log.d(TAG,"Root");
         this.fab.setOnClickListener(this);
     }
 
@@ -382,6 +380,13 @@ public  class RevealAnimator
         };
     }
 
+    public void changeGravity(int gravity) {
+        destroyContainer();
+        this.fabGravity=gravity;
+        initFab();
+
+    }
+
 
     private void backAnimation() {
         if(pathType==PathType.CURVE) {
@@ -541,6 +546,13 @@ public  class RevealAnimator
 
     }
 
+    private void destroyContainer() {
+        if(fabContainer!=null) {
+            ViewGroup parent=(ViewGroup)(fabContainer.getParent());
+            parent.removeView(fabContainer);
+        }
+    }
+
     public void addListener(RevealingListener ... listeners) {
         if(listeners!=null) {
             if(listenerList==null) {
@@ -548,6 +560,10 @@ public  class RevealAnimator
             }
             listenerList.addAll(Arrays.asList(listeners));
         }
+    }
+
+    public View getDependentLayout() {
+        return dependentLayout;
     }
 
     public RevealAnimator reverseWay(boolean reverseWay) {
@@ -759,6 +775,7 @@ public  class RevealAnimator
             return new RevealAnimator(dependentLayout,this);
         }
     }
+
 
     public static RevealAnimator withRoot(@NonNull View dependentLayout, @NonNull FloatingActionButton fab) {
         return new RevealAnimator(dependentLayout,fab,Builder.createBuilder(fab));

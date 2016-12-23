@@ -3,6 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="musicPrimary">#009688</color>
-    <color name="musicPrimaryDark">#004D40</color>
+    <color name="musicPrimary">#FF9100</color>
+    <color name="musicPrimaryDark">#FFC400</color>
 </resources>

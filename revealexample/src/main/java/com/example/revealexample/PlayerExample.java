@@ -5,8 +5,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -16,27 +22,13 @@ import com.vpaliy.library.revealingAnimator.PathType;
 import com.vpaliy.library.revealingAnimator.RevealAnimator;
 import com.vpaliy.library.revealingAnimator.RevealingAdapterListener;
 
-public class PlayerExample extends Fragment{
+public class PlayerExample extends Fragment
+            implements View.OnClickListener{
 
-    private int gravity;
+    private final int gravity=Gravity.TOP|Gravity.END;
     private RevealAnimator rAnimator;
+    private View root;
 
-    public static PlayerExample newInstance(int gravity) {
-        Bundle args=new Bundle();
-        args.putInt("gravity",gravity);
-        PlayerExample example=new PlayerExample();
-        example.setArguments(args);
-        return example;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        savedInstanceState=getArguments();
-        if(savedInstanceState!=null) {
-            gravity = savedInstanceState.getInt("gravity");
-        }
-    }
 
     @Nullable
     @Override
@@ -45,48 +37,53 @@ public class PlayerExample extends Fragment{
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.mode_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.topStart:
+                onClick(null);
+                rAnimator.changeGravity(Gravity.TOP|Gravity.START);
+                return true;
+            case R.id.topEnd:
+                onClick(null);
+                rAnimator.changeGravity(Gravity.END|Gravity.TOP);
+                return true;
+            case R.id.bottomStart:
+                onClick(null);
+                rAnimator.changeGravity(Gravity.START|Gravity.BOTTOM);
+                return true;
+            case R.id.bottomEnd:
+                onClick(null);
+                rAnimator.changeGravity(Gravity.END|Gravity.BOTTOM);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onViewCreated(final View root, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(root, savedInstanceState);
+        this.root=root;
         if(root!=null) {
             ImageView coverImage=(ImageView)(root.findViewById(R.id.coverImage));
             Glide.with(getContext())
-                    .load(R.drawable.cover)
+                    .load(R.drawable.imagine_cover)
                     .asBitmap().centerCrop()
                     .into(coverImage);
             ImageButton playButton=(ImageButton)(root.findViewById(R.id.playPause));
-            playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    rAnimator.setIcon(android.R.drawable.ic_media_play);
-                    ViewGroup internalContainer=(ViewGroup)(root.findViewById(R.id.container));
-                    internalContainer.setBackgroundResource(R.color.musicPrimaryDark);
-                    ViewGroup container=(ViewGroup)(root.findViewById(R.id.controllerContainer));
-                    rAnimator.setRevealingDuration(0);  //very important
-                    for(int index=0;index<container.getChildCount();index++) {
-                        View child=container.getChildAt(index);
-                        child.setVisibility(View.INVISIBLE);
-                        child.animate().scaleY(0.f).scaleX(0.f)
-                                .setStartDelay(index*50L).start();
-                    }
-                    rAnimator.addBackListener(new RevealingAdapterListener() {
-                        @Override
-                        public void onTranslationEnd(FloatingActionButton fab, Animator animator) {
-                            super.onTranslationEnd(fab, animator);
-                            rAnimator.setRevealingDuration(300);
-                        }
-                    });
-                    rAnimator.getActionButton().setVisibility(View.VISIBLE);
-                    rAnimator.hide();
-                }
-            });
-
+            playButton.setOnClickListener(this);
             initAnimator(root);
         }
     }
 
     private void initAnimator(final View root) {
         rAnimator=new RevealAnimator.Builder(gravity, PathType.CURVE)
-                .setColor("#009688").setIcon(android.R.drawable.ic_media_play)
+                .setColor("#FF9100").setIcon(android.R.drawable.ic_media_play)
                 .build(root.findViewById(R.id.container));
         rAnimator.setRevealInterval(0.5f);
 
@@ -100,7 +97,6 @@ public class PlayerExample extends Fragment{
 
             @Override
             public void onRevealingEnd(FloatingActionButton fab, Animator animator) {
-                super.onRevealingEnd(fab, animator);
                 fab.setVisibility(View.INVISIBLE);
                 ViewGroup internalContainer=(ViewGroup)(root.findViewById(R.id.container));
                 ViewGroup container=(ViewGroup)(root.findViewById(R.id.controllerContainer));
@@ -114,6 +110,30 @@ public class PlayerExample extends Fragment{
                 }
             }
         });
+    }
+
+    public void onClick(View view) {
+        rAnimator.setIcon(android.R.drawable.ic_media_play);
+        ViewGroup internalContainer=(ViewGroup)(root.findViewById(R.id.container));
+        internalContainer.setBackgroundResource(R.color.musicPrimaryDark);
+        ViewGroup container=(ViewGroup)(root.findViewById(R.id.controllerContainer));
+        rAnimator.setRevealingDuration(0);  //very important
+        for(int index=0;index<container.getChildCount();index++) {
+            View child=container.getChildAt(index);
+            child.setVisibility(View.INVISIBLE);
+            child.animate().scaleY(0.f).scaleX(0.f)
+                    .setStartDelay(index*50L).start();
+        }
+        rAnimator.addBackListener(new RevealingAdapterListener() {
+            @Override
+            public void onTranslationEnd(FloatingActionButton fab, Animator animator) {
+                super.onTranslationEnd(fab, animator);
+                rAnimator.setRevealingDuration(300);
+            }
+        });
+        rAnimator.getActionButton().setVisibility(View.VISIBLE);
+        rAnimator.hide();
+
     }
 
 }

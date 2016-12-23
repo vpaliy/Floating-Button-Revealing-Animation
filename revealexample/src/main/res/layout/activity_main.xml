@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include
@@ -15,11 +14,12 @@
 
         <FrameLayout
             android:id="@+id/mainContent"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </FrameLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/listItem"

@@ -34,6 +34,7 @@ public class FullScreenExample extends Fragment {
         if(root!=null) {
             FloatingActionButton fab=(FloatingActionButton)(root.findViewById(R.id.fab));
             rAnimator=RevealAnimator.withRoot(root,fab);
+            rAnimator.setIcon(android.R.drawable.ic_menu_share);
             rAnimator.reverseWay(true);
             rAnimator.addListener(new RevealingAdapterListener() {
                 @Override

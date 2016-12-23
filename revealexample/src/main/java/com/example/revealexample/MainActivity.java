@@ -6,7 +6,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private int gravity= Gravity.TOP|Gravity.END;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar actionBar=(Toolbar)(findViewById(R.id.mainToolbar));
         if(getSupportActionBar()==null) {
             setSupportActionBar(actionBar);
+            getSupportActionBar().setTitle("");
         }
 
         drawerLayout=(DrawerLayout)(findViewById(R.id.drawer_layout));
@@ -34,13 +33,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_first_fragment: {
+                        getSupportActionBar().show();
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainContent, PlayerExample.newInstance(gravity))
+                                .replace(R.id.mainContent, new PlayerExample())
                                 .commit();
                         break;
                     }
 
                     case R.id.nav_second_fragment: {
+                        getSupportActionBar().hide();
                         getSupportFragmentManager().beginTransaction()
                             .replace(R.id.mainContent,new FullScreenExample())
                             .commit();
@@ -56,25 +57,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.mode_menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.topStart:
-                return true;
-            case R.id.topEnd:
-                return true;
-            case R.id.bottomStart:
-                return true;
-            case R.id.bottomEnd:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
